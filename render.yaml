@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: personal-finance-tracker
+    runtime: node
+    buildCommand: npm ci --include=dev && npm ci --prefix client --include=dev && npm ci --prefix server --omit=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: CLERK_PUBLISHABLE_KEY
+        sync: false
+      - key: VITE_CLERK_PUBLISHABLE_KEY
+        sync: false

@@ -10,6 +10,7 @@ import {
 import App from "./App.jsx";
 import { setTokenProvider } from "./lib/api.js";
 import "./styles.css";
+import "./mobile.css";
 import "./auth.css";
 
 function SignInScreen() {

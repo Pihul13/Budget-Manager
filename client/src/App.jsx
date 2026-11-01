@@ -60,6 +60,9 @@ export default function App() {
   const [cacheRefreshError, setCacheRefreshError] = useState("");
   const location = useLocation();
   const { user } = useUser();
+  const hasMonthPicker = ["/", "/budget", "/transactions"].includes(
+    location.pathname,
+  );
 
   useEffect(() => {
     let active = true;
@@ -148,7 +151,9 @@ export default function App() {
         <div className="mobile-backdrop" onClick={() => setMobileOpen(false)} />
       )}
       <main className="main-area">
-        <header className="topbar">
+        <header
+          className={`topbar ${hasMonthPicker ? "has-month-picker" : ""}`}
+        >
           <button
             className="icon-btn mobile-menu"
             onClick={() => setMobileOpen(true)}
@@ -161,7 +166,7 @@ export default function App() {
               {nav.find(([to]) => to === location.pathname)?.[1] || "Dashboard"}
             </h1>
           </div>
-          {["/", "/budget", "/transactions"].includes(location.pathname) && (
+          {hasMonthPicker && (
             <div className="month-picker">
               <button className="icon-btn" onClick={() => shiftMonth(-1)}>
                 <ChevronLeft size={18} />
@@ -177,7 +182,9 @@ export default function App() {
               </button>
             </div>
           )}
-          <UserButton />
+          <div className="topbar-user">
+            <UserButton />
+          </div>
         </header>
         <div className="content">
           {settingsError && <div className="error">{settingsError}</div>}

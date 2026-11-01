@@ -50,7 +50,11 @@ router.post("/import", async (req, res) => {
       Array.isArray(payload.data) ||
       Object.keys(payload.data).length !== Object.keys(models).length ||
       Object.keys(models).some((key) => !Array.isArray(payload.data[key])) ||
-      Object.values(payload.data).some((rows) => !Array.isArray(rows))
+      Object.values(payload.data).some((rows) =>
+        rows.some(
+          (row) => !row || typeof row !== "object" || Array.isArray(row),
+        ),
+      )
     )
       return res.status(400).json({ error: "Invalid backup file." });
     const userId = currentUserId();

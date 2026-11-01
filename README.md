@@ -1,4 +1,4 @@
-# Personal Finance Tracker
+# Budget Manager - Personal Finance Tracker
 
 A multi-user personal finance tracker. Each person signs in, keeps a private
 workspace, and can personalize it with their own display name (for example,

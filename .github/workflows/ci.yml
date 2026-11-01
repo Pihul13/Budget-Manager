@@ -20,6 +20,7 @@ jobs:
       - run: npm ci --prefix server
       - run: npm run build
       - run: npm --prefix server test
+      - run: npm --prefix client test
       - run: npm audit
       - run: npm --prefix client audit
       - run: npm --prefix server audit

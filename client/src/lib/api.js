@@ -1,11 +1,16 @@
+import { clearRequestCache, getCached } from "./requestCache.js";
+
 const apiBaseUrl = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 let tokenProvider = null;
+let cacheScope = null;
 
-export function setTokenProvider(provider) {
+export function setTokenProvider(provider, scope = null) {
+  if (!provider || scope !== cacheScope) clearRequestCache();
   tokenProvider = provider;
+  cacheScope = provider ? scope : null;
 }
 
-async function request(url, options = {}) {
+async function fetchRequest(url, options = {}) {
   const headers = new Headers(options.headers || {});
   if (options.body && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
@@ -22,6 +27,18 @@ async function request(url, options = {}) {
     throw new Error(body.error || `Request failed (${res.status})`);
   }
   return res.json();
+}
+
+function request(url, options = {}) {
+  const method = options.method || "GET";
+  if (method === "GET" && cacheScope) {
+    return getCached(`${cacheScope}:${url}`, () => fetchRequest(url, options));
+  }
+
+  return fetchRequest(url, options).then((result) => {
+    if (method !== "GET") clearRequestCache();
+    return result;
+  });
 }
 
 export const api = {

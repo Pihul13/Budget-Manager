@@ -37,7 +37,7 @@ function SignInScreen() {
 }
 
 function AuthenticationGate() {
-  const { isLoaded, isSignedIn, getToken } = useAuth();
+  const { isLoaded, isSignedIn, getToken, userId } = useAuth();
   const [apiReady, setApiReady] = React.useState(false);
 
   React.useEffect(() => {
@@ -46,10 +46,10 @@ function AuthenticationGate() {
       setApiReady(false);
       return;
     }
-    setTokenProvider(getToken);
+    setTokenProvider(getToken, userId);
     setApiReady(true);
     return () => setTokenProvider(null);
-  }, [getToken, isLoaded, isSignedIn]);
+  }, [getToken, isLoaded, isSignedIn, userId]);
 
   if (!isLoaded || (isSignedIn && !apiReady)) {
     return <main className="auth-page">Loading your private workspace…</main>;

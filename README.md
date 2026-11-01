@@ -70,6 +70,13 @@ is enabled; multiple instances could process the same due payment concurrently.
 Choose a paid Render instance for an always-on public service; free instances
 may sleep when idle.
 
+## Install on a phone
+
+The app includes a web app manifest and launcher icons so it can be added to a
+phone's home screen. Open the deployed HTTPS address on Android in Chrome, tap
+the menu, then choose **Install app** or **Add to Home screen**. On iPhone or
+iPad, open the address in Safari, tap **Share**, then **Add to Home Screen**.
+
 ## Privacy and data
 
 - The API requires a valid Clerk identity and scopes database reads and writes

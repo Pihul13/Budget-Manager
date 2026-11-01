@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ChevronDown, Pencil, Plus, Trash2 } from "lucide-react";
 import { api } from "../lib/api.js";
+import { useApiCacheRefresh } from "../lib/useApiCacheRefresh.js";
 import { Empty, Modal } from "../App.jsx";
 
 const blank = { name: "", type: "expense", parentId: "", color: "#6D63D9" };
@@ -24,6 +25,7 @@ export default function Categories() {
       .get("/api/categories")
       .then(setCats)
       .catch((e) => setError(e.message));
+  useApiCacheRefresh(load);
   useEffect(() => {
     load();
   }, []);

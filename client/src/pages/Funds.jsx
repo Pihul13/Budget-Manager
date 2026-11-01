@@ -8,6 +8,7 @@ import {
   WalletCards,
 } from "lucide-react";
 import { api } from "../lib/api.js";
+import { useApiCacheRefresh } from "../lib/useApiCacheRefresh.js";
 import { dateInput, money } from "../lib/format.js";
 import { Empty, Modal } from "../App.jsx";
 import FundSpendModal from "../components/FundSpendModal.jsx";
@@ -48,6 +49,7 @@ export default function Funds() {
     }
   };
 
+  useApiCacheRefresh(load);
   useEffect(() => {
     load();
   }, []);

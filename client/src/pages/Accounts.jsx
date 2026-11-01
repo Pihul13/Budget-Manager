@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { CreditCard, Pencil, Plus, Trash2, Wallet } from "lucide-react";
 import { api } from "../lib/api.js";
 import { money } from "../lib/format.js";
+import { useApiCacheRefresh } from "../lib/useApiCacheRefresh.js";
 import { Empty, Modal, Panel } from "../App.jsx";
 
 const blank = {
@@ -26,6 +27,7 @@ export default function Accounts() {
       .get("/api/accounts")
       .then(setAccounts)
       .catch((e) => setError(e.message));
+  useApiCacheRefresh(load);
   useEffect(() => {
     load();
   }, []);

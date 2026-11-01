@@ -34,6 +34,10 @@ import Categories from "./pages/Categories.jsx";
 import Settings from "./pages/Settings.jsx";
 import { api } from "./lib/api.js";
 import { monthInput } from "./lib/format.js";
+import {
+  REFRESH_ERROR_EVENT,
+  REFRESH_EVENT,
+} from "./lib/requestCache.js";
 
 const nav = [
   ["/", "Dashboard", LayoutDashboard],
@@ -53,18 +57,44 @@ export default function App() {
   const [theme, setTheme] = useState("light");
   const [displayName, setDisplayName] = useState("");
   const [settingsError, setSettingsError] = useState("");
+  const [cacheRefreshError, setCacheRefreshError] = useState("");
   const location = useLocation();
   const { user } = useUser();
 
   useEffect(() => {
-    api
-      .get("/api/settings")
-      .then((settings) => {
-        setTheme(settings.theme || "light");
-        setDisplayName(settings.displayName || user?.fullName || "");
-      })
-      .catch((error) => setSettingsError(error.message));
+    let active = true;
+    const loadSettings = () =>
+      api
+        .get("/api/settings")
+        .then((settings) => {
+          if (!active) return;
+          setTheme(settings.theme || "light");
+          setDisplayName(settings.displayName || user?.fullName || "");
+        })
+        .catch((error) => {
+          if (active) setSettingsError(error.message);
+        });
+    loadSettings();
+    window.addEventListener(REFRESH_EVENT, loadSettings);
+    return () => {
+      active = false;
+      window.removeEventListener(REFRESH_EVENT, loadSettings);
+    };
   }, [user?.fullName]);
+  useEffect(() => {
+    const handleRefreshError = (event) => {
+      setCacheRefreshError(
+        event.detail?.message || "Could not refresh saved data. Check your connection.",
+      );
+    };
+    const clearRefreshError = () => setCacheRefreshError("");
+    window.addEventListener(REFRESH_ERROR_EVENT, handleRefreshError);
+    window.addEventListener(REFRESH_EVENT, clearRefreshError);
+    return () => {
+      window.removeEventListener(REFRESH_ERROR_EVENT, handleRefreshError);
+      window.removeEventListener(REFRESH_EVENT, clearRefreshError);
+    };
+  }, []);
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
   }, [theme]);
@@ -151,6 +181,11 @@ export default function App() {
         </header>
         <div className="content">
           {settingsError && <div className="error">{settingsError}</div>}
+          {cacheRefreshError && (
+            <div className="error">
+              Showing saved data. {cacheRefreshError}
+            </div>
+          )}
           <Routes>
             <Route path="/" element={<Dashboard month={month} />} />
             <Route path="/accounts" element={<Accounts />} />

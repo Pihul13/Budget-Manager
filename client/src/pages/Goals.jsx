@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ArrowLeftRight, Pencil, Plus, Target, Trash2 } from "lucide-react";
 import { api } from "../lib/api.js";
+import { useApiCacheRefresh } from "../lib/useApiCacheRefresh.js";
 import { money } from "../lib/format.js";
 import { Empty, Modal } from "../App.jsx";
 import { dateInput } from "../lib/format.js";
@@ -39,6 +40,7 @@ export default function Goals() {
       .get("/api/goals")
       .then(setGoals)
       .catch((e) => setError(e.message));
+  useApiCacheRefresh(load);
 
   useEffect(() => {
     load();

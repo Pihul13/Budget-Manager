@@ -7,6 +7,7 @@ import {
   WalletCards,
 } from "lucide-react";
 import { api } from "../lib/api.js";
+import { useApiCacheRefresh } from "../lib/useApiCacheRefresh.js";
 import { dateInput, money } from "../lib/format.js";
 import { Empty, Modal } from "../App.jsx";
 
@@ -57,6 +58,7 @@ export default function Transactions({ month }) {
       setError(e.message);
     }
   };
+  useApiCacheRefresh(load);
   useEffect(() => {
     load();
   }, [month]);

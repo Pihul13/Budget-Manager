@@ -13,6 +13,7 @@ workspace, and can personalize it with their own display name (for example,
 - Saving goals and funds
 - Recurring transaction rules
 - Dashboard, month history, and net-worth snapshots
+- Private browser cache for faster page navigation
 - INR currency
 - Private JSON export/import backups
 - Responsive interface
@@ -82,6 +83,10 @@ may sleep when idle.
   code.
 - Settings provides a JSON backup for the signed-in user's records. Store
   downloaded backups somewhere private and secure.
+- API responses are cached in browser IndexedDB, partitioned by signed-in
+  account, and cleared when the user signs out or switches accounts. Cached
+  data is not encrypted at rest; use a private device/browser profile and
+  sign out when finished.
 
 ## Accounting model
 

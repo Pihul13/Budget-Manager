@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Pencil, Play, Plus, SkipForward, Trash2 } from "lucide-react";
 import { api } from "../lib/api.js";
+import { useApiCacheRefresh } from "../lib/useApiCacheRefresh.js";
 import { money, dateInput } from "../lib/format.js";
 import { Modal, Empty } from "../App.jsx";
 const blank = {
@@ -35,6 +36,7 @@ export default function Recurring() {
     setCats(c);
     setRules(r);
   };
+  useApiCacheRefresh(() => load().catch((e) => setError(e.message)));
   useEffect(() => {
     load().catch((e) => setError(e.message));
   }, []);

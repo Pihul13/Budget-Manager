@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { api } from "../lib/api.js";
+import { useApiCacheRefresh } from "../lib/useApiCacheRefresh.js";
 import { money } from "../lib/format.js";
 import { budgetedCategorySpend } from "../lib/budget.js";
 import { Empty, Panel } from "../App.jsx";
@@ -54,6 +55,7 @@ export default function Dashboard({ month }) {
     setBudgetTransactions(budgetTx);
     setCategories(cats);
   };
+  useApiCacheRefresh(() => load().catch(console.error));
   useEffect(() => {
     load().catch(console.error);
   }, [month]);

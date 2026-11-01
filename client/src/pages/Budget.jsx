@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Save } from "lucide-react";
 import { api } from "../lib/api.js";
+import { useApiCacheRefresh } from "../lib/useApiCacheRefresh.js";
 import { money } from "../lib/format.js";
 import { budgetedCategorySpend } from "../lib/budget.js";
 import { Empty, Panel } from "../App.jsx";
@@ -30,6 +31,7 @@ export default function Budget({ month }) {
     setBudget(currentBudget);
     setSpend(budgetedCategorySpend(tx, cs, currentBudget.categoryLimits));
   };
+  useApiCacheRefresh(() => load().catch((e) => setMsg(e.message)));
   useEffect(() => {
     load().catch((e) => setMsg(e.message));
   }, [month]);
